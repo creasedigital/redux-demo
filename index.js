@@ -1,6 +1,7 @@
 const redux = require("redux");
 
 const createStore = redux.createStore;
+const combineReducers = redux.combineReducers;
 
 // First Principle of redux - the state is a SINGLE global object - which is available in the redux store and our App is always subscribed to
 
@@ -25,6 +26,7 @@ const reducer = (state, action) => {
 // An action creator is an object that returns an action
 
 const BUY_CAKE = "BUY_CAKES";
+const BUY_ICECREAM = "BUY_ICECREAM";
 
 const buyCake = () => {
 	return {
@@ -33,19 +35,47 @@ const buyCake = () => {
 	};
 };
 
+const buyIceCreams = () => {
+	return {
+		type: BUY_ICECREAM,
+		info: "First redux action",
+	};
+};
+
 //REDUCERS
 //(prevState, action) => newState
 
-const initialState = {
+// const initialState = {
+// 	numOfCakes: 10,
+// 	numOfIceCreams: 20,
+// };
+
+const initialCakeState = {
 	numOfCakes: 10,
 };
 
-const reducer = (state = initialState, action) => {
+const initialIceCreamState = {
+	numOfIceCreams: 20,
+};
+
+const cakeReducer = (state = initialCakeState, action) => {
 	switch (action.type) {
 		case BUY_CAKE:
 			return {
 				...state,
 				numOfCakes: state.numOfCakes - 1,
+			};
+		default:
+			return state;
+	}
+};
+
+const iceCreamReducer = (state = initialIceCreamState, action) => {
+	switch (action.type) {
+		case BUY_ICECREAM:
+			return {
+				...state,
+				numOfIceCreams: state.numOfIceCreams - 1,
 			};
 
 		default:
@@ -53,7 +83,12 @@ const reducer = (state = initialState, action) => {
 	}
 };
 
-const store = createStore(reducer);
+const rootReducer = combineReducers({
+	cake: cakeReducer,
+	iceCream: iceCreamReducer,
+});
+
+const store = createStore(rootReducer);
 
 console.log(store.getState());
 
@@ -62,5 +97,7 @@ const unsubscribe = store.subscribe(() => console.log(store.getState()));
 store.dispatch(buyCake());
 store.dispatch(buyCake());
 store.dispatch(buyCake());
+store.dispatch(buyIceCreams());
+store.dispatch(buyIceCreams());
 
 unsubscribe();
