@@ -1,3 +1,7 @@
+const redux = require("redux");
+
+const createStore = redux.createStore;
+
 // First Principle of redux - the state is a SINGLE global object - which is available in the redux store and our App is always subscribed to
 
 // Second Principle of redux - the state can only be changed by dispatching an action e.g. BUY_CAKE
@@ -48,3 +52,7 @@ const reducer = (state = initialState, action) => {
 			return state;
 	}
 };
+
+const store = createStore(reducer);
+
+console.log(store.getState());
